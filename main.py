@@ -2,6 +2,7 @@ from aiogram import Bot, Dispatcher, executor, types
 import logging
 from dotenv import load_dotenv
 import os
+import random
 
 
 load_dotenv()
@@ -42,13 +43,19 @@ async def myinfo(message: types.Message):
     await message.reply(f"Ваш id: {id}\nВаш first_name: {first_name}\nВаш user_name: {user_name}")
 
 
-@dp.message_handler(commands=["picture"])
+@dp.message_handler(commands=['picture'])
 async def picture(message: types.Message):
     """
         Функция отправляет картинку
     """
-    with open('images/ps.jpg', 'rb') as img:
-        await message.answer_photo(photo=img)
+    # Получаем список файлов в папке images
+    files = os.listdir('images')
+    # Выбираем случайное имя файла
+    filename = random.choice(files)
+    # Отправляем файл пользователю
+    with open(f"images/{filename}", "rb") as file:
+        await message.answer_photo(file)
+
 
 
 if __name__ == "__main__":
