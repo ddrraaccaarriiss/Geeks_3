@@ -1,65 +1,33 @@
-from aiogram import Bot, Dispatcher, executor, types
+from aiogram import executor
 import logging
-from dotenv import load_dotenv
-import os
-import random
+from aiogram.dispatcher.filters import Text
 
-
-load_dotenv()
-bot = Bot(token=os.getenv('BOT_TOKEN'))
-dp = Dispatcher(bot)
-
-
-@dp.message_handler(commands=["start"])
-async def info_command(message: types.Message):
-    """
-        Функция приветствия пользователя по имени
-    """
-    await message.answer(f"Приветствую тебя, {message.from_user.first_name}")
-
-
-@dp.message_handler(commands=['help'])
-async def help(message: types.Message):
-    """
-        Функция показывает команды
-    """
-    menu = (
-        "/start - начать диалог\n"
-        "/help - показать меню\n"
-        "/myinfo - получить информацию\n"
-        "/picture - получить случайную картинку\n"
-    )
-    await message.reply(f"Список команд:\n{menu}")
-
-
-@dp.message_handler(commands=['myinfo'])
-async def myinfo(message: types.Message):
-    """
-        Функция показывает информацию о пользователе
-    """
-    id = message.from_user.id
-    first_name = message.from_user.first_name
-    user_name = message.from_user.username
-    await message.reply(f"Ваш id: {id}\nВаш first_name: {first_name}\nВаш user_name: {user_name}")
-
-
-@dp.message_handler(commands=['picture'])
-async def picture(message: types.Message):
-    """
-        Функция отправляет картинку
-    """
-    # Получаем список файлов в папке images
-    files = os.listdir('images')
-    # Выбираем случайное имя файла
-    filename = random.choice(files)
-    # Отправляем файл пользователю
-    with open(f"images/{filename}", "rb") as file:
-        await message.answer_photo(file)
-
+# from handlers.admin import check_curses
+# from handlers.admin import example
+from config import dp
+from handlers.basic_handlers import (start,help,myinfo,picture,all_sms)
+from handlers.shop import (show_categories,show_category_clothes,
+                           show_category_clothes_callback,
+                           show_category_shoes,
+                           show_category_shoes_callback,
+                           show_address)
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    executor.start_polling(dp)
+    dp.register_message_handler(show_categories,commands=["start"])
+    dp.register_message_handler(show_category_clothes, Text(equals="Одежды"))
+    dp.register_callback_query_handler(show_category_clothes_callback, Text(equals='jackets'))
+    dp.register_message_handler(show_category_shoes, Text(equals="Обувь"))
+    dp.register_callback_query_handler(show_category_shoes_callback, Text(equals='slippers'))
+    dp.register_message_handler(show_address, Text(equals="Адрес"))
 
-# pip freeze > requirements.txt
+    dp.register_message_handler(start,commands=["start"])
+    dp.register_message_handler(help, commands=["help"])
+    dp.register_message_handler(myinfo, commands=["myinfo"])
+    dp.register_message_handler(picture, commands=["picture"])
+
+    # dp.register_message_handler(example)
+    # dp.register_message_handler(check_curses)
+    dp.register_message_handler(all_sms)
+    executor.start_polling(dp)
