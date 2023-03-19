@@ -4,14 +4,6 @@ import os
 import random
 
 
-async def start(message: types.Message):
-    """
-        Функция приветствия пользователя по имени
-    """
-    await message.answer(f"Приветствую тебя, {message.from_user.first_name}")
-    await message.delete() # udalaet nashy zaprosy
-
-
 
 async def help(message: types.Message):
     """
@@ -52,9 +44,4 @@ async def picture(message: types.Message):
         await message.answer_photo(file)
         await message.delete()
 
-
-
-async def all_sms(message: types.Message):
-    """ функция отлавливает все не обработанные сообщения и отвечает на это  - Привет """
-    await message.reply("Привет")
 
