@@ -2,6 +2,7 @@
 from aiogram import types
 from aiogram.dispatcher.filters import BoundFilter
 
+
 class IsAdminFilter(BoundFilter):
     key = 'is_admin'
 
@@ -27,6 +28,8 @@ async def is_admin(message: types.Message) -> bool:
 
     return False
 
+
+
 async def ban_user(message: types.Message):
     """
         обработчик, чтоб банить пользователя в чате
@@ -45,7 +48,6 @@ async def ban_user(message: types.Message):
 
 
 
-
 async def check_curses(message: types.Message):
     """
         Функция отлавливает матерные слова
@@ -57,6 +59,7 @@ async def check_curses(message: types.Message):
                 print(message.text.lower().replace(' ', ''))
                 await message.reply("кикнуть пользователя за испльзование плохих слов или нет?")
                 break
+
 
 
 async def pin_message(message: types.Message):
