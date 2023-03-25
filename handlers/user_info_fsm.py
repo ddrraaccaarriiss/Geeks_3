@@ -2,10 +2,11 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-
+from config import dp
 
 # FSM - Finite State Mashine
 class UserForm(StatesGroup):
+    product_id = State()
     name = State()
     age = State()
     address = State()
@@ -13,12 +14,25 @@ class UserForm(StatesGroup):
 
 
 
-async def start_form(message: types.Message):
+async def start_form(callback: types.CallbackQuery):
     """
           Фуекция для старта форума
     """
-    await UserForm.name.set()
-    await message.answer("Введите ваше имя")
+    await UserForm.product_id.set()
+    state = dp.current_state()
+    async with state.proxy() as data:
+        data['product_id'] = int(callback.data.replace('buy_product_', ''))
+
+    await UserForm.next()
+    await callback.message.answer("Для оформления заказа нужно заполнить анкету. \nВведите ваше имя")
+
+
+# async def start_form(message: types.Message):
+#     """
+#           Фуекция для старта форума
+#     """
+#     await UserForm.name.set()
+#     await message.answer("Введите ваше имя")
 
 
 
@@ -80,7 +94,17 @@ async def process_delivery_day(message: types.Message, state: FSMContext):
 
 
 
+from db.base import create_clients
 
+async def process_done(message: types.Message, state: FSMContext):
+    """
+         Записываем  заказы  в таблицу Order
+    """
+    async with state.proxy() as data:
+        create_clients(data)
+    await message.reply(
+        "Спасибо. Мы с вами свяжемся.",
+        reply_markup=ReplyKeyboardRemove())
 
 
 

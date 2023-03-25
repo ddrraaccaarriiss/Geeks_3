@@ -4,6 +4,12 @@ import os
 import random
 
 
+async def info_command(message: types.Message):
+    """
+        Функция приветствия пользователя по имени
+    """
+    await message.answer(f"Приветствую тебя, {message.from_user.first_name}")
+
 
 async def help(message: types.Message):
     """
