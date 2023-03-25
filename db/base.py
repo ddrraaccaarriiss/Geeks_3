@@ -63,14 +63,14 @@ def create_clients(data):
     data = data.as_dict()
     cursor.execute(
         '''
-        INSERT INTO order(
-        product_id,
-        name,
-        address
-        ) VALUES (:product_id,:name,:address)''',
-                {'product_id': data['product_id'],
-                'name': data['name'],
-                'address': data['address']})
+        INSERT INTO orders(
+        username,
+        address,
+        product_id
+        ) VALUES (:username,:address,:product_id)''',
+        {'username': data['name'],
+         'address': data['address'],
+         'product_id': data['product_id']})
     db.commit()
 
 

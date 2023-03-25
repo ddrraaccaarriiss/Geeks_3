@@ -16,7 +16,7 @@ class UserForm(StatesGroup):
 
 async def start_form(callback: types.CallbackQuery):
     """
-          Фуекция для старта форума
+          Функция для старта форума
     """
     await UserForm.product_id.set()
     state = dp.current_state()
@@ -25,14 +25,6 @@ async def start_form(callback: types.CallbackQuery):
 
     await UserForm.next()
     await callback.message.answer("Для оформления заказа нужно заполнить анкету. \nВведите ваше имя")
-
-
-# async def start_form(message: types.Message):
-#     """
-#           Фуекция для старта форума
-#     """
-#     await UserForm.name.set()
-#     await message.answer("Введите ваше имя")
 
 
 
@@ -89,7 +81,7 @@ async def process_delivery_day(message: types.Message, state: FSMContext):
         f"Возраст: {data['age']}\n"
         f"Адрес: {data['address']}\n"
         f"День доставки: {data['delivery_day']}")
-    await state.finish()
+    await UserForm.next()
     await message.answer(f"Ваш заказ будет доставлен\nпо адресу: {data['address']} \nдень недели: {data['delivery_day']}")
 
 
@@ -105,7 +97,7 @@ async def process_done(message: types.Message, state: FSMContext):
     await message.reply(
         "Спасибо. Мы с вами свяжемся.",
         reply_markup=ReplyKeyboardRemove())
-
+    await state.finish()
 
 
 
