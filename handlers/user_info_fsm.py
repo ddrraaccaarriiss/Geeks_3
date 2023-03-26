@@ -1,4 +1,6 @@
 
+
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -67,13 +69,15 @@ async def process_address(message: types.Message, state: FSMContext):
     await message.reply("Выберите день, который вам удобен для получения товара", reply_markup=kb)
 
 
-
+from db.base import create_clients
 async def process_delivery_day(message: types.Message, state: FSMContext):
     """"
         Обработчик ответа на вопрос "Выберите день, который вам удобен для получения товара"
+        и заполнения таблицы зкакзов orders
     """
     async with state.proxy() as data:
         data['delivery_day'] = message.text.strip() # Сохраняем день в данных
+        create_clients(data)
         print(data)
     await message.answer(
         f"Спасибо за заполнение анкеты.\n"
@@ -81,24 +85,8 @@ async def process_delivery_day(message: types.Message, state: FSMContext):
         f"Возраст: {data['age']}\n"
         f"Адрес: {data['address']}\n"
         f"День доставки: {data['delivery_day']}")
-    await UserForm.next()
+    await state.finish() # завершаем состояние
     await message.answer(f"Ваш заказ будет доставлен\nпо адресу: {data['address']} \nдень недели: {data['delivery_day']}")
-
-
-
-from db.base import create_clients
-
-async def process_done(message: types.Message, state: FSMContext):
-    """
-         Записываем  заказы  в таблицу Order
-    """
-    async with state.proxy() as data:
-        create_clients(data)
-    await message.reply(
-        "Спасибо. Мы с вами свяжемся.",
-        reply_markup=ReplyKeyboardRemove())
-    await state.finish()
-
 
 
 

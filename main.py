@@ -6,7 +6,7 @@ from aiogram.dispatcher.filters import Text
 from config import dp
 from handlers.basic_handlers import (info_command, help, myinfo, picture)
 # hw 2
-from handlers.shop import (show_categories, show_address,show_category_products)
+from handlers.shop import (show_categories, show_address, show_category_products)
 
 # hw 3
 from handlers.admin import (check_curses, ban_user, pin_message)
@@ -14,8 +14,7 @@ from handlers.admin import (check_curses, ban_user, pin_message)
 from handlers.user_info_fsm import (start_form, process_name, process_age,
                                     process_address, UserForm, process_delivery_day)
 
-# hw 5
-from handlers.user_info_fsm import process_done
+
 
 
 from db.base import (
@@ -24,6 +23,7 @@ from db.base import (
     create_tables,
     add_products,
 )
+
 
 async def startup(_):
     init_db()
@@ -58,7 +58,6 @@ if __name__ == "__main__":
     dp.register_message_handler(process_delivery_day, state=UserForm.delivery_day)
     # hw 5
     dp.register_callback_query_handler(start_form, lambda callback: callback.data.startswith("buy_product_"))
-    dp.register_message_handler(process_done)
 
     dp.register_message_handler(check_curses)
     executor.start_polling(dp, on_startup=startup)
