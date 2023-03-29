@@ -3,7 +3,7 @@ import logging
 from aiogram.dispatcher.filters import Text
 
 # hw 1
-from config import dp
+from config import dp, scheduler
 from handlers.basic_handlers import (info_command, help, myinfo, picture)
 # hw 2
 from handlers.shop import (show_categories, show_address, show_category_products)
@@ -23,6 +23,11 @@ from db.base import (
     create_tables,
     add_products,
 )
+# hw 6
+from handlers.scheduler import handle_scheduler
+
+
+
 
 
 async def startup(_):
@@ -58,7 +63,10 @@ if __name__ == "__main__":
     dp.register_message_handler(process_delivery_day, state=UserForm.delivery_day)
     # hw 5
     dp.register_callback_query_handler(start_form, lambda callback: callback.data.startswith("buy_product_"))
+    # hw 6
+    dp.register_message_handler(handle_scheduler, Text(startswith='Напомнить'))
 
     dp.register_message_handler(check_curses)
+    scheduler.start()
     executor.start_polling(dp, on_startup=startup)
 

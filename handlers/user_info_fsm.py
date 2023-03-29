@@ -24,7 +24,6 @@ async def start_form(callback: types.CallbackQuery):
     state = dp.current_state()
     async with state.proxy() as data:
         data['product_id'] = int(callback.data.replace('buy_product_', ''))
-
     await UserForm.next()
     await callback.message.answer("Для оформления заказа нужно заполнить анкету. \nВведите ваше имя")
 
