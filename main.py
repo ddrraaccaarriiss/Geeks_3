@@ -63,7 +63,7 @@ if __name__ == "__main__":
     dp.register_message_handler(process_delivery_day, state=UserForm.delivery_day)
     # hw 5
     dp.register_callback_query_handler(start_form, lambda callback: callback.data.startswith("buy_product_"))
-    # hw 6
+    # hw 6,7
     dp.register_message_handler(handle_scheduler, Text(startswith='Напомнить'))
 
     dp.register_message_handler(check_curses)
