@@ -9,8 +9,12 @@ async def parsing_handle(message: types.Message):
         функция будет отправлят каждый раз рандомно выбранные автомобили  пользователю
     """
     cars = parse_cars()
-    index_ = randint(1, 20)
-    await message.answer(
-        f"Название автомобиля:  {cars[index_]['title']}\n"
-        f"Цена автомобиля:  {cars[index_]['price']}\n"
-        f"Фото автомобиля:  {cars[index_]['photo']}")
+    index_ = randint(1, 10)
+    await message.answer_photo(
+        cars[index_]['photo'],
+        caption= f"Название автомобиля:  {cars[index_]['title']}\nЦена автомобиля:  {cars[index_]['price']}\n"
+    )
+
+
+
+

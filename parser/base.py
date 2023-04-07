@@ -22,7 +22,6 @@ def parse_cars():
         car['price'] = data.find("span",class_= "catalog-item-price").text.strip()
         car['photo'] = data.find("img",class_= "catalog-item-cover-img").get("src")
         cars.append(car)
-
     return cars
 
 
