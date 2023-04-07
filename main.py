@@ -23,10 +23,10 @@ from db.base import (
     create_tables,
     add_products,
 )
-# hw 6
+# hw 6,7
 from handlers.scheduler import handle_scheduler
-
-
+# hw 8
+from handlers.parsing_handler import parsing_handle
 
 
 
@@ -65,6 +65,8 @@ if __name__ == "__main__":
     dp.register_callback_query_handler(start_form, lambda callback: callback.data.startswith("buy_product_"))
     # hw 6,7
     dp.register_message_handler(handle_scheduler, Text(startswith='Напомнить'))
+    # hw 8
+    dp.register_message_handler(parsing_handle, commands=["cars"], commands_prefix="/")
 
     dp.register_message_handler(check_curses)
     scheduler.start()

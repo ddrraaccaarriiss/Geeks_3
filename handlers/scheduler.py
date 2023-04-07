@@ -10,7 +10,7 @@ async def handle_scheduler(message: types.Message):
     """
     text = message.text[10:]
     chat_id = message.from_user.id
-    scheduler.add_job(jop_handler, 'cron', second=1, args=(text, chat_id,))
+    scheduler.add_job(jop_handler, 'cron', second=1, timezone='Asia/Bishkek', args=(text, chat_id,))
     await message.answer(text='okay')
 
 
